@@ -1,5 +1,5 @@
 # Track.ing
-A python web application project developped by Yves Touitou and Raphaël Richard for the Webscrapping course @ ESILV in 5th year
+A python web application project developed by Yves Touitou and Raphaël Richard within the ESILV's 5th year course named "Web scraping and data processing".
 
 ## Objective
 Find interesting statistics about your favorite artists thanks to our customized metrics.
