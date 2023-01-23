@@ -134,7 +134,7 @@ def GetArtistAlbumsAndTracks(artistName):
     dfTracks.to_csv('DynamicData/artist_uniqueTracks.csv', index = False)
 
 
-def GetSamplingInfo(dfTracks):
+def GetSamplingInfo(dfTracks, artistName):
     tracksNbSamples = []
     tracksNbSampled = []
     tracksNbRemixes = []
@@ -199,7 +199,7 @@ def ArtistDynamicData(artistName):
     dfCurrentArtistAlbums.to_csv(f'DynamicData/artist_albums.csv.csv')
 
     dfCurrentArtistTracks = pd.read_csv('DynamicData/artist_uniqueTracks.csv', index_col=False)
-    GetSamplingInfo(dfCurrentArtistTracks)
+    GetSamplingInfo(dfCurrentArtistTracks, artistName)
     dfCurrentArtistTracks['artist_uri'] = artist_uri
     dfCurrentArtistTracks.to_csv(f'DynamicData/artist_uniqueTracks.csv')
 
