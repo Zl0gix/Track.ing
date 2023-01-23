@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<h1>Welcome to My Website</h1>
+<h1>Welcome to Track.ing</h1>
 <script>
     function search() {
         fetch('search/?ArtistName=' + document.getElementById('ArtistName').value, {
@@ -28,7 +28,6 @@
         });
     };
     function createCard(artist){
-        // "
         return `<div class="card mb-3" style="max-width: 540px;">
             <div class="row g-0">
               <div class="col-md-4">
