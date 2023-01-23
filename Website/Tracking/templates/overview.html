@@ -22,10 +22,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-lg-5">
             <div>
                 <h2>Radar</h2>
-                <div>{{radar}}</div>
+                <div>{{radar|safe}}</div>
             </div>
         </div>
     </div>
@@ -33,17 +33,14 @@
 <br>
 <br>
 <div class="container">
-    <div class="row">
-        <div name="graph1">
-            <h1>NSM</h1>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div name="graph1">
-            <h1>NSM</h1>
-        </div>
-    </div>
+    <h2>Metrics explanation :</h2>
+    <p>
+        Consistency: Takes in count years without any track release, albums/EPs/singles and tracks release dates variance.<br>
+        Hard Working: Takes in count average number of tracks, EPs and albums per year.<br>
+        Original: Takes in count the average number of samples used accorded to "whosampled.com".<br>
+        Inspirational: Takes in count the average number of songs sampled and remixed used accorded to "whosampled.com".<br>
+        G.O.A.T: Takes in count a potential top studio albums sales all-time rank, recent billboard appearances and number of Spotify followers.
+    </p>
 </div>
 
 {% endblock %}

@@ -30,6 +30,10 @@ Here are the metrics (rated between 0 and 100):
 
 Except adding other sources to make the metrics even more precise, we're currently missing every song's play count closing many doors about analyzing an artist. This type of data is hidden by song streaming platforms and this would need a collaboration acquiring it.
 
+
+An aesthetical upgrade would be key as well, offering a beautiful graph experience and a good-looking radar with customized fonts and labels over rates for further explanation about the selected metric.
+
+
 ### How to use it
 
 First go to the website folder and run the command "py manage.py runserver".
