@@ -19,6 +19,16 @@ def Radar(consistency, hardWorking, original, inspirational, GOAT):
             f'G.O.A.T {GOATScaled}'],
     fill='toself',
     fillcolor='#7efffb',
+    #hoverinfo = 'r',
+    hoverlabel=dict(
+        bgcolor='black',
+        font=dict(color='#ff7ed0')
+    ),
+    hovertext=['Consistency: Takes in count years without any track release, albums/EPs/singles and tracks release dates variance.',
+        'Hard Working: Takes in count average number of tracks, EPs and albums per year.',
+        'Original: Takes in count the average number of samples used accorded to \"whosampled.com\".',
+        'Inspirational: Takes in count the average number of songs sampled and remixed used accorded to \"whosampled.com\".',
+        'G.O.A.T: Takes in count a potential top studio albums sales all-time rank, recent billboard appearances and number of Spotify followers.'],
     opacity=1
     ))
 
