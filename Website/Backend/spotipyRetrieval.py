@@ -232,7 +232,7 @@ def ArtistPotentialDynamicData(artistName):
 
     artist_uri = getArtistInfo(artistName, 1)[0].uri
     # Writes necessary csvs if needed
-    if (artist_uri not in pd.read_csv('Data/albumsTOP12artists.csv')['artist_uri'].unique()):
+    if (artist_uri not in pd.read_csv('Data/albumsTOP12artists.csv')['artist_uri'].unique() and artist_uri not in pd.read_csv('Backend/DynamicData/artist_albums.csv')['artist_uri'].unique()):
         GetArtistAlbumsAndTracks(artistName)
 
         artistName = artistName.replace('/', '-')
