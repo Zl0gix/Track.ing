@@ -11,7 +11,6 @@ import base64
 import pandas as pd
 import numpy as np
 import time
-import re
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -131,7 +130,7 @@ def getArtistAlbums(artistURI):
 
 def GetArtistAlbumsAndTracks(artistName):
     ## By default, considers only first artist mentioned
-    artistURI = getArtistInfo(artistName, 1)[0][0]
+    artistURI = getArtistInfo(artistName, 1)[0].uri
     albums = getArtistAlbums(artistURI)
 
     dfAlbums = pd.DataFrame(albums)
@@ -166,7 +165,7 @@ def GetArtistAlbumsAndTracks(artistName):
     print(f'Stats for {artistName} --')
 
     print(f'Number of albums/EPs/singles : {len(dfAlbums)}')
-    dfAlbums.drop(columns=['tracks_ids'])[::-1].to_csv('DynamicData/artist_albums.csv', index = False)
+    dfAlbums.drop(columns=['tracks_ids'])[::-1].to_csv('Backend/DynamicData/artist_albums.csv', index = False)
 
     print(f'Number of tracks : {len(dfTracks)}')
     #dfTracks.to_csv('artist_albumsTracks.csv', index = False)
@@ -174,7 +173,7 @@ def GetArtistAlbumsAndTracks(artistName):
     dfTracks = dfTracks.drop_duplicates(subset=['trackName'], keep='first')
 
     print(f'Number of unique tracks : {len(dfTracks)}')
-    dfTracks.to_csv('DynamicData/artist_uniqueTracks.csv', index = False)
+    dfTracks.to_csv('Backend/DynamicData/artist_uniqueTracks.csv', index = False)
 
 
 def GetSamplingInfo(dfTracks, artistName):
@@ -231,21 +230,21 @@ def GetSamplingInfo(dfTracks, artistName):
 def ArtistPotentialDynamicData(artistName):
     start = time.time()
 
-    artist_uri = getArtistInfo(artistName, 1)[0][0]
+    artist_uri = getArtistInfo(artistName, 1)[0].uri
     # Writes necessary csvs if needed
     if (artist_uri not in pd.read_csv('Data/albumsTOP12artists.csv')['artist_uri'].unique()):
         GetArtistAlbumsAndTracks(artistName)
 
         artistName = artistName.replace('/', '-')
         
-        dfCurrentArtistAlbums = pd.read_csv('DynamicData/artist_albums.csv', index_col=False)
+        dfCurrentArtistAlbums = pd.read_csv('Backend/DynamicData/artist_albums.csv', index_col=False)
         dfCurrentArtistAlbums['artist_uri'] = artist_uri
-        dfCurrentArtistAlbums.to_csv(f'DynamicData/artist_albums.csv')
+        dfCurrentArtistAlbums.to_csv(f'Backend/DynamicData/artist_albums.csv')
 
-        dfCurrentArtistTracks = pd.read_csv('DynamicData/artist_uniqueTracks.csv', index_col=False)
+        dfCurrentArtistTracks = pd.read_csv('Backend/DynamicData/artist_uniqueTracks.csv', index_col=False)
         GetSamplingInfo(dfCurrentArtistTracks, artistName)
         dfCurrentArtistTracks['artist_uri'] = artist_uri
-        dfCurrentArtistTracks.to_csv(f'DynamicData/artist_uniqueTracks.csv')
+        dfCurrentArtistTracks.to_csv(f'Backend/DynamicData/artist_uniqueTracks.csv')
 
     print(f'Time needed for {artistName} : {time.time() - start} seconds.')
 

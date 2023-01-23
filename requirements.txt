@@ -1,0 +1,9 @@
+numpy
+pandas
+plotly
+plotly.express
+django
+spotipy
+requests_html
+nest_asyncio
+import requests

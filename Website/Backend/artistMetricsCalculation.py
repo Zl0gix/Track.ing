@@ -17,8 +17,8 @@ def GetMetrics(artist_URI, artist_name, artist_followers):
         tracksUniqueArtist = tracksDf[tracksDf['artist_uri'] == artist_URI]
     else:
         # Dynamic Data needs to have been generated before
-        albumsUniqueArtist = pd.read_csv('DynamicData/artist_albums.csv')
-        tracksUniqueArtist = pd.read_csv('DynamicData/artist_uniqueTracks.csv')
+        albumsUniqueArtist = pd.read_csv('Backend/DynamicData/artist_albums.csv')
+        tracksUniqueArtist = pd.read_csv('Backend/DynamicData/artist_uniqueTracks.csv')
     
     # Conversion to datetime64 for data analysis
     albumsUniqueArtist["release_date"] = pd.to_datetime(albumsUniqueArtist["release_date"])

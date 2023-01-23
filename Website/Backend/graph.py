@@ -61,7 +61,7 @@ def Radar(statsDictionary):
 
     #fig.show()
 
-    return pltIO.to_html(fig)
+    return pltIO.to_html(fig, full_html=False)
 
 
 

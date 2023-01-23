@@ -3,7 +3,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-from Backend.spotipyRetrieval import getArtistInfo, getArtistInfoFromID
+from Backend.spotipyRetrieval import getArtistInfo, getArtistInfoFromID, ArtistPotentialDynamicData
+from Backend.artistMetricsCalculation import GetMetrics
+from Backend.graph import Radar
 
 import json
 
@@ -26,9 +28,13 @@ def overview(request):
         else:
             return HttpResponse('There was an error')
     template = loader.get_template('overview.html')
+    
+    ArtistPotentialDynamicData(artist.name)
+
     context = {
         'title': 'Tracking - Overview',
         'artist': artist,
+        'radar': Radar(GetMetrics(artist.uri, artist.name, artist.followers)),
     }
     return HttpResponse(template.render(context, request))
 
