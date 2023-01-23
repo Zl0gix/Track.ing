@@ -228,26 +228,27 @@ def GetSamplingInfo(dfTracks, artistName):
     dfTracks['nbRemixes'] = tracksNbRemixes
 
 
-def ArtistDynamicData(artistName):
+def ArtistPotentialDynamicData(artistName):
     start = time.time()
 
     artist_uri = getArtistInfo(artistName, 1)[0][0]
-    # Writes necessary csvs
-    GetArtistAlbumsAndTracks(artistName)
+    # Writes necessary csvs if needed
+    if (artist_uri not in pd.read_csv('Data/albumsTOP12artists.csv')['artist_uri'].unique()):
+        GetArtistAlbumsAndTracks(artistName)
 
-    artistName = artistName.replace('/', '-')
-    
-    dfCurrentArtistAlbums = pd.read_csv('DynamicData/artist_albums.csv', index_col=False)
-    dfCurrentArtistAlbums['artist_uri'] = artist_uri
-    dfCurrentArtistAlbums.to_csv(f'DynamicData/artist_albums.csv.csv')
+        artistName = artistName.replace('/', '-')
+        
+        dfCurrentArtistAlbums = pd.read_csv('DynamicData/artist_albums.csv', index_col=False)
+        dfCurrentArtistAlbums['artist_uri'] = artist_uri
+        dfCurrentArtistAlbums.to_csv(f'DynamicData/artist_albums.csv')
 
-    dfCurrentArtistTracks = pd.read_csv('DynamicData/artist_uniqueTracks.csv', index_col=False)
-    GetSamplingInfo(dfCurrentArtistTracks, artistName)
-    dfCurrentArtistTracks['artist_uri'] = artist_uri
-    dfCurrentArtistTracks.to_csv(f'DynamicData/artist_uniqueTracks.csv')
+        dfCurrentArtistTracks = pd.read_csv('DynamicData/artist_uniqueTracks.csv', index_col=False)
+        GetSamplingInfo(dfCurrentArtistTracks, artistName)
+        dfCurrentArtistTracks['artist_uri'] = artist_uri
+        dfCurrentArtistTracks.to_csv(f'DynamicData/artist_uniqueTracks.csv')
 
     print(f'Time needed for {artistName} : {time.time() - start} seconds.')
 
 
 #print(getArtistInfo('Metallica', 1))
-#ArtistDynamicData('Mariah Carey')
+#ArtistPotentialDynamicData('Mariah Carey')
