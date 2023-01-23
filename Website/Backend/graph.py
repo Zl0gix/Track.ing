@@ -6,7 +6,14 @@ def RoundAndScale(metric):
     metricScaled = int(round(metricScaled, 0))
     return metricScaled
 
-def Radar(consistency, hardWorking, original, inspirational, GOAT):
+def Radar(statsDictionary):
+
+    consistency = statsDictionary['Consistency']
+    hardWorking = statsDictionary['Hard Working']
+    original = statsDictionary['Original']
+    inspirational = statsDictionary['Inspirational']
+    GOAT = statsDictionary['G.O.A.T']
+
     consistencyScaled = RoundAndScale(consistency)
     hardWorkingScaled = RoundAndScale(hardWorking)
     originalityScaled = RoundAndScale(original)
