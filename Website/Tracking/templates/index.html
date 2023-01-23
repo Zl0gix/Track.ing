@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1>Welcome to My Website</h1>
+<script>
+    function search() {
+        fetch('search/?ArtistName=' + document.getElementById('ArtistName').value, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+        .then(response => response.text())
+        .then(text => {
+            console.log(text);
+            return JSON.parse(text);
+        })
+        .then(data => {
+            if (data.length == 0) {
+                document.getElementById('results').innerHTML = 'No results found';
+                return;
+            } 
+            console.log(data)
+            console.log(data.map(createCard))
+            document.getElementById('results').innerHTML = data.map(createCard).join('<br>');
+        });
+    };
+    function createCard(artist){
+        // style="max-width: 540px;"
+        return 
+        `<div class="card mb-3">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="${artist.image}" class="img-fluid rounded-start">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">${artist.name}</h5>
+                  <p class="card-text"><small class="text-muted"><a href="overview/?spotify=${artist.uri}">Go to overview</a></small></p>
+                </div>
+              </div>
+            </div>
+          </div>`;
+    };
+</script>
+<form action="{% url 'overview' %}" method="get">
+    <input id="ArtistName" name="ArtistName" type="search" class="form-control" placeholder="Search for an artist..." oninput="search()">
+</form>
+<ul id="results">
+</ul>
+{% endblock %}

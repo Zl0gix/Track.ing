@@ -23,21 +23,39 @@ nest_asyncio.apply()
 s = HTMLSession()
 
 # API key needs to be hidden
+"""
 from secret import Secrets
 
 secrets = Secrets()
 
-client_id = secrets.spotifyClientID
-client_secret = secrets.spotifyClientSecret
+client_id = secrets["spotifyClientID"]
+client_secret = secrets["spotifyClientSecret"]
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=client_id,
                                                            client_secret=client_secret))
+"""
 
+class Artist:
+    def __init__(self, uri, name, followers, image) -> None:
+        self.uri = uri
+        self.name = name
+        self.followers = followers
+        self.image = image
+
+    def as_dict(self):
+        return {
+            'uri': self.uri,
+            'name': self.name,
+            'followers': self.followers,
+            'image': self.image
+        }
+
+from Backend import sp
 
 ############################################################################
 ## Function for Spotify suggestions when entering the website
 
-def getArtistInfo(artistName, number):
+def getArtistInfo(artistName, number) -> list[Artist]:
     artists = []
     artists_info = sp.search(artistName, limit = number, type = 'artist')['artists']['items']
 
@@ -47,9 +65,12 @@ def getArtistInfo(artistName, number):
         ## We retrieve the official name for accurate seeking on other websites
         artist_name = artist_info['name']
         artist_followers = artist_info['followers']['total']
-        artist_image = artist_info['images'][0]['url']
+        if len(artist_info['images']) > 0:
+            artist_image = artist_info['images'][0]['url']
+        else:
+            artist_image = 'https://i.imgur.com/3z7wB8n.png'
     
-        artists.append([artist_uri, artist_name, artist_followers, artist_image])
+        artists.append(Artist(artist_uri, artist_name, artist_followers, artist_image))
 
     return artists
 
