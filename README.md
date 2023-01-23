@@ -29,3 +29,8 @@ Here are the metrics (rated between 0 and 100):
 ### What's improvable
 
 Except adding other sources to make the metrics even more precise, we're currently missing every song's play count closing many doors about analyzing an artist. This type of data is hidden by song streaming platforms and this would need a collaboration acquiring it.
+
+### How to use it
+
+First go to the website folder and run the command "py manage.py runserver".
+Then go to http://127.0.0.1:8000/Tracking and type the name of the artist you are searching for

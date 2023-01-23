@@ -10,11 +10,9 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" > 
     <style>
-        html {
-            font-size: 14px;
-          }
-          
           html {
+            background-color: black;
+            font-size: 14px;
             position: relative;
             min-height: 100%;
           }
@@ -34,26 +32,26 @@
           }
           
           .btn-primary {
-            color: #fff;
-            background-color: #1b6ec2;
-            border-color: #1861ac;
+            color: #000;
+            background-color: #ff7ed0;
+            border-color: #ff7ed0;
           }
           
           .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-            color: #fff;
-            background-color: #1b6ec2;
-            border-color: #1861ac;
+            color: #000;
+            background-color: #ff7ed0;
+            border-color: #ff7ed0;
           }
           
           .border-top {
-            border-top: 1px solid #e5e5e5;
+            border-top: 1px solid #1a1a1a;
           }
           .border-bottom {
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid #1a1a1a;
           }
           
           .box-shadow {
-            box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+            box-shadow: 0 .25rem .75rem #7efffbb0;
           }
           
           button.accept-policy {
@@ -61,6 +59,14 @@
             line-height: inherit;
           }
           
+          h1 {
+            color: #ff7ed0;
+          }
+
+          h2 {
+            color: #7efffb;
+          }
+
           .footer {
             position: absolute;
             bottom: 0;
@@ -74,9 +80,9 @@
     <!-- <link rel="stylesheet" href="./style.css"> -->
     <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
   </head>
-  <body>
+  <body style="background-color:#000;">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" href="{% url 'index' %}">Track.ing</a>
             </div>

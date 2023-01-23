@@ -1,6 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Welcome to My Website</h1> 
-<p>{{SpotifyID}}</p>
+<h1>Career overview of {{artist.name}}</h1>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card border border-white rounded bg-light">
+                <h2>{{artist.name}}</h2>
+                <img src="{{artist.image}}" class="card-img-top" style="height: 16vw; object-fit: cover;">
+                <div class="card-body">
+                    <p class="card-text" style="color:#7efffb;">
+                        Followers : {{artist.followers}}
+                        <br>
+                        <a href="https://open.spotify.com/artist/{{artist.id}}">Open artist Spotify page</a>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <a href="{{artist.uri}}">See on desktop app</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div>
+                <h2>Radar</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div name="graph1">
+            <h1>NSM</h1>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div name="graph1">
+            <h1>NSM</h1>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

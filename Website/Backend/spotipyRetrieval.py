@@ -36,18 +36,20 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=client_id,
 """
 
 class Artist:
-    def __init__(self, uri, name, followers, image) -> None:
+    def __init__(self, uri, name, followers, image, id) -> None:
         self.uri = uri
         self.name = name
         self.followers = followers
         self.image = image
+        self.id = id
 
     def as_dict(self):
         return {
             'uri': self.uri,
             'name': self.name,
             'followers': self.followers,
-            'image': self.image
+            'image': self.image,
+            'id': self.id,
         }
 
 from Backend import sp
@@ -59,9 +61,12 @@ def getArtistInfo(artistName, number) -> list[Artist]:
     artists = []
     artists_info = sp.search(artistName, limit = number, type = 'artist')['artists']['items']
 
-    for artist_info in artists_info:
+    if len(artists_info) == 0:
+        artists_info = sp.search('Daft Punk', limit = 1, type = 'artist')['artists']['items']
 
+    for artist_info in artists_info:
         artist_uri = artist_info['uri']
+        artist_id = artist_info['id']
         ## We retrieve the official name for accurate seeking on other websites
         artist_name = artist_info['name']
         artist_followers = artist_info['followers']['total']
@@ -70,10 +75,27 @@ def getArtistInfo(artistName, number) -> list[Artist]:
         else:
             artist_image = 'https://i.imgur.com/3z7wB8n.png'
     
-        artists.append(Artist(artist_uri, artist_name, artist_followers, artist_image))
+        artists.append(Artist(artist_uri, artist_name, artist_followers, artist_image, artist_id))
 
     return artists
 
+############################################################################
+## Function for Spotify artist from ID
+
+def getArtistInfoFromID(artistID) -> Artist:
+    artist_info = sp.artist(artistID)
+
+    artist_uri = artist_info['uri']
+    artist_id = artist_info['id']
+    ## We retrieve the official name for accurate seeking on other websites
+    artist_name = artist_info['name']
+    artist_followers = artist_info['followers']['total']
+    if len(artist_info['images']) > 0:
+        artist_image = artist_info['images'][0]['url']
+    else:
+        artist_image = 'https://i.imgur.com/3z7wB8n.png'
+
+    return Artist(artist_uri, artist_name, artist_followers, artist_image, artist_id)
 
 ############################################################################
 ## Function for dynamic data retrieval, data goes into DynamicData/

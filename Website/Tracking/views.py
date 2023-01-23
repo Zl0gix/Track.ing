@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 
-from Backend.spotipyRetrieval import getArtistInfo
+from Backend.spotipyRetrieval import getArtistInfo, getArtistInfoFromID
 
 import json
 
@@ -17,10 +17,18 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def overview(request):
+    artist = None
+    if request.method == 'GET':
+        if request.GET.get('ArtistName'):
+            artist = getArtistInfo(request.GET.get('ArtistName'), 1)
+        elif request.GET.get('SpotifyID'):
+            artist = getArtistInfoFromID(request.GET.get('SpotifyID'))
+        else:
+            return HttpResponse('There was an error')
     template = loader.get_template('overview.html')
     context = {
         'title': 'Tracking - Overview',
-        #'SpotifyID': request.GET.get('ArtistName'),
+        'artist': artist,
     }
     return HttpResponse(template.render(context, request))
 
