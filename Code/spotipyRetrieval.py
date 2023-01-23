@@ -10,10 +10,19 @@ import base64
 
 import pandas as pd
 import numpy as np
+import time
+import re
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
+from requests_html import HTMLSession
+import nest_asyncio
+
+nest_asyncio.apply()
+s = HTMLSession()
+
+# API key needs to be hidden
 from secret import Secrets
 
 secrets = Secrets()
@@ -45,6 +54,9 @@ def getArtistInfo(artistName, number):
     return artists
 
 
+############################################################################
+## Function for dynamic data retrieval, data goes into DynamicData/
+
 ## Used in the below function named GetArtistAlbumsAndTracks(artistName)
 def getArtistAlbums(artistURI):
     n = 0
@@ -73,9 +85,6 @@ def getArtistAlbums(artistURI):
 
     return allAlbums
 
-
-############################################################################
-## Function for dynamic data retrieval, data goes into DynamicData/
 
 def GetArtistAlbumsAndTracks(artistName):
     ## By default, considers only first artist mentioned
@@ -125,5 +134,77 @@ def GetArtistAlbumsAndTracks(artistName):
     dfTracks.to_csv('DynamicData/artist_uniqueTracks.csv', index = False)
 
 
+def GetSamplingInfo(dfTracks):
+    tracksNbSamples = []
+    tracksNbSampled = []
+    tracksNbRemixes = []
+
+    urlSearchPrefix = "https://www.whosampled.com/search/?q="
+    urlPrefix = "https://www.whosampled.com/"
+    for track in dfTracks['trackName']:
+        URLsearch = urlSearchPrefix + track.replace(' ', '+') + '+' + artistName.replace(' ', '+')
+
+        response = s.get(URLsearch)
+        trackRef = ''
+        trackRefs = re.findall(r'<a class="trackTitle" href=(.*)>\S', response.text)
+
+        nbSamples = np.NaN
+        nbSampled = np.NaN
+        nbRemixes = np.NaN
+
+        if (len(trackRefs) > 0):
+
+            trackRef = trackRefs[0]
+
+            url = urlPrefix + trackRef[2:-1]
+
+            response = s.get(url)
+            #print(response.text)
+            headers = re.findall(r'<span class="section-header-title">(.*)</span>', response.text)
+
+            for header in headers:
+                if (re.match(r'Contains samples', header)):
+                    nbSamples = int(re.findall('\d+', header)[0])
+                else:
+                    nbSamples = 0
+                if (re.match(r'Was sampled', header)):
+                    nbSampled = int(re.findall('\d+', header)[0])
+                else:
+                    nbSampled = 0
+                if (re.match(r'Was remixed', header)):
+                    nbRemixes = int(re.findall('\d+', header)[0])
+                else:
+                    nbRemixes = 0
+
+        tracksNbSamples.append(nbSamples)
+        tracksNbSampled.append(nbSampled)
+        tracksNbRemixes.append(nbRemixes)
+
+    dfTracks['nbSamples'] = tracksNbSamples
+    dfTracks['nbSampled'] = tracksNbSampled
+    dfTracks['nbRemixes'] = tracksNbRemixes
+
+
+def ArtistDynamicData(artistName):
+    start = time.time()
+
+    artist_uri = getArtistInfo(artistName, 1)[0][0]
+    # Writes necessary csvs
+    GetArtistAlbumsAndTracks(artistName)
+
+    artistName = artistName.replace('/', '-')
+    
+    dfCurrentArtistAlbums = pd.read_csv('DynamicData/artist_albums.csv', index_col=False)
+    dfCurrentArtistAlbums['artist_uri'] = artist_uri
+    dfCurrentArtistAlbums.to_csv(f'DynamicData/artist_albums.csv.csv')
+
+    dfCurrentArtistTracks = pd.read_csv('DynamicData/artist_uniqueTracks.csv', index_col=False)
+    GetSamplingInfo(dfCurrentArtistTracks)
+    dfCurrentArtistTracks['artist_uri'] = artist_uri
+    dfCurrentArtistTracks.to_csv(f'DynamicData/artist_uniqueTracks.csv')
+
+    print(f'Time needed for {artistName} : {time.time() - start} seconds.')
+
+
 #print(getArtistInfo('Metallica', 1))
-#GetArtistAlbumsAndTracks('Mariah Carey')
+#ArtistDynamicData('Mariah Carey')
